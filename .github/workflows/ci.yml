@@ -56,3 +56,13 @@ jobs:
     name: Test Ruby
     uses: ./.github/workflows/rspec.yml
 
+  notify-slack-if-failure-on-main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Slack if failure on main
+        if: ${{ failure() }}
+        uses: alphagov/govuk-infrastructure/.github/actions/report-run-failure@main
+        with:
+          slack_webhook_url: ${{ secrets.GOVUK_SLACK_WEBHOOK_URL }}
+          channel: govuk-whitehall-experience-tech
+          message: "Whitehall CI failed on 'main' and blocked the deployment. Investigate!"
